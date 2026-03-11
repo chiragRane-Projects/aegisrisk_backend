@@ -1,5 +1,6 @@
 from app.database import borrower_collection
 from bson import ObjectId
+from app.ml.retrainer import retrain_model
 
 def get_borrower_data(borrower_id):
     borrower = borrower_collection.find_one({"_id": ObjectId(borrower_id)})
@@ -30,7 +31,11 @@ def create_borrower(data):
     }
 
     result = borrower_collection.insert_one(borrower)
-
+    total_borrowers = borrower_collection.count_documents({})
+    
+    if total_borrowers % 50 == 0:
+        retrain_model()
+    
     borrower["_id"] = str(result.inserted_id)
 
     return borrower

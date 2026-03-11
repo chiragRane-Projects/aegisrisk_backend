@@ -2,12 +2,14 @@ from fastapi import FastAPI
 from app.routes.borrower_routes import router as borrower_router
 from app.routes.risk_routes import router as risk_router
 from app.routes.model_routes import router as model_router
+from app.routes.analytics_routes import router as analytics_router
 
 app = FastAPI()
 
 app.include_router(borrower_router)
 app.include_router(risk_router)
 app.include_router(model_router)
+app.include_router(analytics_router)
 
 @app.get("/")
 def root():
