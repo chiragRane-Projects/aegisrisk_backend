@@ -1,4 +1,5 @@
 from app.database import borrower_collection, risk_collection
+from bson import ObjectId
 
 def portfolio_summary():
     total_borrowers = borrower_collection.count_documents({})
@@ -41,11 +42,12 @@ def high_risk_borrowers():
     
     for r in high_risk:
         borrower = borrower_collection.find_one(
-            {"_id": r["borrower_id"]}
+            {"_id": ObjectId(r["borrower_id"])}
         )
         
         borrowers.append({
             "borrower_id": r["borrower_id"],
+            "name": borrower["name"] if borrower else "Unknown",
             "risk_score": r["risk_score"],
             "loan_decision": r["loan_decision"]
         })
